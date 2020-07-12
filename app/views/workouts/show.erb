@@ -1,0 +1,39 @@
+<h2><%= @workout.name %></h2>
+<h3>Duration: <%= @workout.duration_minutes %> minutes</h3>
+<% if !@is_owner %>
+    <p>Created by user: <%= @workout.user.username %></p>
+<% end %>
+<p>Number of users that have done this workout: <%= @user_count %></p>
+<p>Total times this workout has been done: <%= @total_count %></p>
+<h2>Workout guide</h2>
+<p><%= @workout.content %></p>
+<form action="/user_workouts/<%= @workout.id %>" method="POST">
+<input class="btn btn-success" type="submit" value="I just finished this workout"/>
+</form>
+<br/>
+<% if @is_owner %>
+<a href="/workouts/edit/<%= @workout.id %>"><button class="btn btn-warning">Edit this workout</button></a>
+<br/><br/>
+<form action="/workouts/delete/<%= @workout.id %>" method="POST">
+<input class="btn btn-danger" type="submit" value="Delete this workout"/>
+</form>
+<% end %>
+<h3>Your history for this workout</h3>
+<% if @user_workouts.length == 0 %>
+    <p>You have not yet done this workout</p>
+<% else %>
+    <table class="table">
+    <tr><th>Date</th><th></th></tr>
+    <% @user_workouts.each do |user_workout| %>
+        <tr>
+            <td><%= user_workout.created_at %></td>
+            <td>
+                <form action="/user_workouts/delete/<%= user_workout.id %>" method="POST">
+                    <input class="btn btn-danger" type="submit" value="Delete"/>
+                </form>
+            </td>
+        </tr>
+    <% end %>
+    </table>
+<% end %>
+

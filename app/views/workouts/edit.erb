@@ -1,0 +1,22 @@
+<h3>Edit Workout</h3>
+<form action="/workouts/edit/<%= @workout.id %>" method="POST">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" name="name" id="name" placeholder="Name" value="<%= @workout.name %>">
+  </div>
+  <div class="form-group">
+    <label for="duration">Duration (minutes)</label>
+    <input type="number" class="form-control" name="duration" id="duration" placeholder="Minutes" value="<%= @workout.duration_minutes %>">
+  </div>
+  <div class="form-group">
+    <label for="content">Content</label>
+    <textarea class="form-control" id="content" name="content" placeholder="Content"><%= @workout.content %></textarea>
+  </div>
+  <input type="submit" class="btn btn-primary" value="Save Workout">
+  <br/><br/>
+  <% if @error_message != nil %>
+    <div class="alert alert-danger" role="alert">
+      <%= @error_message %>
+    </div>
+  <% end %>
+</form>

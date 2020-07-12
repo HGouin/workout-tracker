@@ -1,0 +1,32 @@
+<h2>Welcome, <%= current_user.username %>!</h2>
+<p><a href="/logout">Log Out</a></p>
+<h3>All Workouts</h3>
+<table class="table">
+<tr><th>Name</th><th>Minutes</th></tr>
+<% @workouts.each do |workout| %>
+    <tr><td><a href="/workouts/<%= workout.id %>"><%= workout.name %></a></td><td><%= workout.duration_minutes %></td></tr>
+<% end %>
+</table>
+
+<h3>My Workouts</h3>
+<table class="table">
+<tr><th>Name</th><th>Minutes</th></tr>
+<% @workouts.filter{|workout| workout.user_id == session[:user_id]}.each do |workout| %>
+    <tr><td><a href="/workouts/<%= workout.id %>"><%= workout.name %></a></td><td><%= workout.duration_minutes %></td></tr>
+<% end %>
+</table>
+
+<h3>Workout History</h3>
+<table class="table">
+<tr><th>Date</th><th>Name</th><th></th></tr>
+<% @user_workouts.each do |user_workout| %>
+    <tr><td><%= user_workout.created_at %></td><td><a href="/workouts/<%= user_workout.workout.id %>"><%= user_workout.workout.name %></a></td><td>
+    <form action="/user_workouts/delete/<%= user_workout.id %>" method="POST">
+    <input class="btn btn-danger" type="submit" value="Delete"/>
+    </form>
+    </td></tr>
+<% end %>
+</table>
+
+
+<a href="/workouts/new"><button class="btn btn-primary">Add Workout</button></a>
