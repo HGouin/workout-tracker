@@ -4,7 +4,7 @@ class ApplicationController < Sinatra::Base
   configure do
     set :views, "app/views"
     enable :sessions
-    set :session_secret, "password_security"
+    set :session_secret, "oiuiiuh"
   end
 
   set :public_folder, File.dirname(__FILE__) + '/public'
@@ -80,10 +80,12 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/workouts/new" do
+    return redirect "/error" if !logged_in?
     erb :'workouts/new'
   end
 
   get "/workouts/edit/:id" do
+    return redirect "/error" if !logged_in?
     @workout = Workout.find_by_id(params[:id])
     if @workout == nil || @workout.user_id != session[:user_id]
       redirect "/error"
@@ -92,6 +94,7 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/workouts/edit/:id" do
+    return redirect "/error" if !logged_in?
     @workout = Workout.find_by_id(params[:id])
     if @workout == nil || @workout.user_id != session[:user_id]
       redirect "/error"
@@ -116,6 +119,7 @@ class ApplicationController < Sinatra::Base
   end
 
   post "/workouts/delete/:id" do
+    return redirect "/error" if !logged_in?
     workout = Workout.find_by_id(params[:id])
     if workout == nil || workout.user_id != session[:user_id]
       redirect "/error"
@@ -126,6 +130,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/workouts/:id" do
+    return redirect "/error" if !logged_in?
     @workout = Workout.find_by_id(params[:id])
     if @workout == nil
       redirect "/error"
@@ -142,6 +147,7 @@ class ApplicationController < Sinatra::Base
 
  
   post "/user_workouts/delete/:id" do
+    return redirect "/error" if !logged_in?
     user_workout = UserWorkout.find_by_id(params[:id])
     if user_workout == nil || user_workout.user_id != session[:user_id]
       redirect "/error"
@@ -157,9 +163,9 @@ class ApplicationController < Sinatra::Base
     UserWorkout.create(:user_id => session[:user_id], :workout_id => params[:id])
     redirect "/workouts/#{params[:id]}"
   end
-
   
   post "/workouts" do
+    return redirect "/error" if !logged_in? 
     if params[:name].empty?
       @error_message = "Name must not be empty"
       return erb :'workouts/new'
